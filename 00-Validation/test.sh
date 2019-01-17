@@ -37,10 +37,10 @@ make clean; make
 # exe/SortieDeCache.exe $I $I $ITER
 # done
 
-for I in {6958..8191..1}
+for I in {10..512..1}
 do
 (( ITER=3))
-exe/SortieDeCache.exe $I $I $ITER
+exe/test.exe $I $I $ITER
 done
 
 # for I in {8192..262144..4096}
