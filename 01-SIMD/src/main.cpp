@@ -38,14 +38,14 @@ int main(int argc, char* argv[]) {
     S2 = (float *) malloc(size * sizeof(float));
 
 
-    for (unsigned long i = 0; i < size; i++) {
-        // A[i] = (float)(rand() % 360 - 180.0);
+    for (unsigned long int i = 0; i < size; i++) {
+        A[i] = (float)(rand() % 360 - 180.0);
         B[i] = (float)(rand() % 360 - 180.0);
     }
 
     /*** Validation ***/
-    // sequentiel(A,B,S1,size);
-    // parallele(A,B,S2,size);
+    sequentiel(A,B,S1,size);
+    parallele(A,B,S2,size);
     bool valide = false;
     for (unsigned long int i = 0; i < size; i++) {
         if(S1[i] == S2[i]) {
@@ -66,14 +66,26 @@ int main(int argc, char* argv[]) {
     if (valide) {
         for (auto it =0; it < iter; it++) {
             t0 = std::chrono::high_resolution_clock::now();
-            //sequentiel(A, B, S1, size);
-            //parallele(A, B, S2, size);
+            sequentiel(A, B, S1, size);
             t1 = std::chrono::high_resolution_clock::now();
             double duration = std::chrono::duration<double>(t1-t0).count();
             if (duration < min_duration) min_duration = duration;
         }
 
-    std::cout << min_duration << " " << (min_duration/size) << std::endl;
+    std::cout << "Séquentiel : " << min_duration << " " << (min_duration/size) << std::endl;
+    }
+
+    min_duration = DBL_MAX;
+    if (valide) {
+        for (auto it =0; it < iter; it++) {
+            t0 = std::chrono::high_resolution_clock::now();
+            parallele(A, B, S2, size);
+            t1 = std::chrono::high_resolution_clock::now();
+            double duration = std::chrono::duration<double>(t1-t0).count();
+            if (duration < min_duration) min_duration = duration;
+        }
+
+    std::cout << "Parallèle : " << min_duration << " " << (min_duration/size) << std::endl;
     }
 
     // Libération de la mémoire : indispensable
