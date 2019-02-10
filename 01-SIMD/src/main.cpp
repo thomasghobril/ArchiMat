@@ -63,30 +63,26 @@ int main(int argc, char* argv[]) {
     std::chrono::high_resolution_clock::time_point t0 = std::chrono::high_resolution_clock::now();
     std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
     double min_duration = DBL_MAX;
-    if (valide) {
-        for (auto it =0; it < iter; it++) {
-            t0 = std::chrono::high_resolution_clock::now();
-            sequentiel(A, B, S1, size);
-            t1 = std::chrono::high_resolution_clock::now();
-            double duration = std::chrono::duration<double>(t1-t0).count();
-            if (duration < min_duration) min_duration = duration;
-        }
+    for (auto it =0; it < iter; it++) {
+        t0 = std::chrono::high_resolution_clock::now();
+        sequentiel(A, B, S1, size);
+        t1 = std::chrono::high_resolution_clock::now();
+        double duration = std::chrono::duration<double>(t1-t0).count();
+        if (duration < min_duration) min_duration = duration;
+    }
 
     std::cout << "Séquentiel : " << min_duration << " " << (min_duration/size) << std::endl;
-    }
 
     min_duration = DBL_MAX;
-    if (valide) {
-        for (auto it =0; it < iter; it++) {
-            t0 = std::chrono::high_resolution_clock::now();
-            parallele(A, B, S2, size);
-            t1 = std::chrono::high_resolution_clock::now();
-            double duration = std::chrono::duration<double>(t1-t0).count();
-            if (duration < min_duration) min_duration = duration;
-        }
+    for (auto it =0; it < iter; it++) {
+        t0 = std::chrono::high_resolution_clock::now();
+        parallele(A, B, S2, size);
+        t1 = std::chrono::high_resolution_clock::now();
+        double duration = std::chrono::duration<double>(t1-t0).count();
+        if (duration < min_duration) min_duration = duration;
+    }
 
     std::cout << "Parallèle : " << min_duration << " " << (min_duration/size) << std::endl;
-    }
 
     // Libération de la mémoire : indispensable
 
