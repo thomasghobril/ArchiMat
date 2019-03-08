@@ -1,1 +1,2 @@
-nvcc -Xcompiler -fopenmp -O3 -o saxpi.exe saxpi.cu
+#!/bin/bash
+nvcc -Xcompiler -fopenmp -O3 -o saxpy.exe saxpy.cu
