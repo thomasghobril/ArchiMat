@@ -1,9 +1,9 @@
 #!/bin/bash
 make clean; make
 
-for I in {512..1024..1}
+for I in {32..4096..8}
 do
-(( ITER=3))
+(( ITER=10))
 exe/test.exe $I $I $ITER
 done
 
