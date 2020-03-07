@@ -18,11 +18,11 @@ CC = g++
 
 # -- Flags ----------
 # PAS DE VECTORISATION -----
-# C_OPTIMISATION_FLAGS = -O3 -std=c++11 -march=native -fno-tree-vectorize
+C_OPTIMISATION_FLAGS = -O3 -std=c++11 -march=native -mavx512f -fno-tree-vectorize
 
 
 # VECTORISATION INVISIBLE
-C_OPTIMISATION_FLAGS = -O3 -std=c++11 -march=native -mavx512f 
+# C_OPTIMISATION_FLAGS = -O3 -std=c++11 -march=native
 
 # VECTORISATION FORCEE
 # C_OPTIMISATION_FLAGS = -O3 -std=c++11 -march=native -ftree-vectorize
@@ -33,7 +33,7 @@ CFLAGS = $(C_OPTIMISATION_FLAGS) $(C_INC_FLAGS)
 LDFLAGS = $(C_OPTIMISATION_FLAGS) $(C_INC_FLAGS)
 
 # -- Final product ----------
-PRODUCT   = tp1_ex2_vec.exe
+PRODUCT   = tp1_ex2_novec.exe
 
 # -- src and obj List ----------
 SRC = $(addprefix ${SRC_PATH}/, $(FILE))
