@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
     cudaMemcpy(d_Source, Source[0], height*width*sizeof(u_char), cudaMemcpyHostToDevice);
 
     std::chrono::high_resolution_clock::time_point t0 = std::chrono::high_resolution_clock::now();
-    for (auto it =0; it < ITER; it++) {
+    for (auto it =0; it < ITER; it++) { 
         cpu_sobel(Source, Resultat, height, width, nthreads);
     }
     std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
