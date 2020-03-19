@@ -10,7 +10,7 @@ MODULE_PATH = exe
 INC_PATH = include
 
 RM := rm -rf
-CC = g++-6
+CC = g++
 NVCC = nvcc -ccbin $(CC)
 
 CXXFLAGS = -std=c++11 -Xcompiler -fopenmp
