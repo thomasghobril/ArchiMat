@@ -12,7 +12,7 @@ double sequentiel(double* A, double* B, double* S, unsigned long int size) {
     return S[4];
 }
 
-double parallele(double* A,double* B, double*S, unsigned long int size) {
+double parallele(double* A, double* B, double*S, unsigned long int size) {
     #pragma omp parallel for schedule(static)
         for (unsigned long int i = 0; i < size; i++) {
             S[i] = (A[i] + B[i])/2;
@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
     /* initialize random seed: */
     srand (time(NULL));
     unsigned short int cores = atoi(argv[1]);
-    omp_set_num_threads(cores);
+    
     int maxCores = omp_get_max_threads();
     std::cout << " Moyenne avec cache chaud " << cores <<":"<< maxCores << std::endl;
    
