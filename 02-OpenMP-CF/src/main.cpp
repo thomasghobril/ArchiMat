@@ -32,9 +32,8 @@ int main(int argc, char* argv[]) {
    for (auto cores =2; cores <= maxCores; cores+=2) {
        omp_set_num_threads(cores);
 
-    for(unsigned long long size = 1024/8; size<(32*1024*1024)/8;size*=1.1) {
-        //unsigned long long iter = 10*(128*1024*1024/size);
-        unsigned long long iter = 30;
+    for(unsigned long long size = 8192/8; size<(32*1024*1024)/8;size = size + max(1024, size*0.1)) {
+        unsigned long long iter = 45;
 
     // Création des données de travail
     double * A,* B,* C,* S1,* S2, * A1,* B1,* A2,* B2;
@@ -81,8 +80,9 @@ int main(int argc, char* argv[]) {
         double par_duration = std::chrono::duration<double>(t1-t0).count();
         par_duration /= (size*iter);    
     
-        std::cout << 8*size/1024 << " " << seq_duration << " " << par_duration << " " << seq_duration/par_duration << " " << cores << " " << result << " " << std::endl;
-
+        std::cout << 8*size/1024 << " " << seq_duration << " " << par_duration << " ";
+        std::cout << seq_duration/par_duration << " " << cores << " " << result << " " << std::endl;
+    
     /*** Validation ***/
     bool valide = false;
     for (unsigned long int i = 0; i < size; i++) {
