@@ -25,11 +25,14 @@ int main(int argc, char* argv[]) {
     /* initialize random seed: */
     srand (time(NULL));
     unsigned short int cores = atoi(argv[1]);
-    int maxCores = omp_get_max_threads();
-    omp_set_num_threads(cores);
-    std::cout << " Moyenne avec cache chaud " << cores <<":"<< maxCores << std::endl;
 
-    for(unsigned long long size = 1024; size<(128*1024*1024);size*=1.2) {
+    int maxCores = omp_get_max_threads();
+    //std::cout << " Moyenne avec cache chaud " << cores <<":"<< maxCores << std::endl;
+   
+   for (auto cores =2; cores < maxCores; cores+=2) {
+       omp_set_num_threads(cores);
+
+    for(unsigned long long size = 1024; size<(32*1024*1024);size*=1.2) {
         //unsigned long long iter = 10*(128*1024*1024/size);
         unsigned long long iter = 20;
 
@@ -58,6 +61,7 @@ int main(int argc, char* argv[]) {
     std::chrono::high_resolution_clock::time_point t1;
     double min_duration = DBL_MAX;
     
+    
     t0 = std::chrono::high_resolution_clock::now();
     for (auto it =0; it < iter; it++) {
         if (it%2==0) {A=A1;B=B1;} else {A=A2;B=B2;}
@@ -67,18 +71,17 @@ int main(int argc, char* argv[]) {
     double seq_duration = std::chrono::duration<double>(t1-t0).count();
     seq_duration /= (size*iter);
 
-    t0 = std::chrono::high_resolution_clock::now();
-    for (auto it =0; it < iter; it++) {
-        if (it%2==0) {A=A1;B=B1;} else {A=A2;B=B2;}
-        result += parallele(A, B, S2, size);
-    }
-    t1 = std::chrono::high_resolution_clock::now();
-    double par_duration = std::chrono::duration<double>(t1-t0).count();
-    par_duration /= (size*iter);
+ 
+        t0 = std::chrono::high_resolution_clock::now();
+        for (auto it =0; it < iter; it++) {
+            if (it%2==0) {A=A1;B=B1;} else {A=A2;B=B2;}
+            result += parallele(A, B, S2, size);
+        }
+        t1 = std::chrono::high_resolution_clock::now();
+        double par_duration = std::chrono::duration<double>(t1-t0).count();
+        par_duration /= (size*iter);    
     
-    
-    std::cout << 8*size/1024 << " " << seq_duration << " " << par_duration << " " << seq_duration/par_duration << " " << iter << " " << result << " " << std::endl;
-    // std::cout << size << " " << seq_duration << " " << par_duration << std::endl;
+        std::cout << 8*size/1024 << " " << seq_duration << " " << par_duration << " " << seq_duration/par_duration << " " << cores << " " << result << " " << std::endl;
 
     /*** Validation ***/
     bool valide = false;
@@ -100,6 +103,7 @@ int main(int argc, char* argv[]) {
     free(B2);
     free(S1);
     free(S2);    
+}
 }
     return 0;
 }
