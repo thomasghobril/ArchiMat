@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
     unsigned short int cores = atoi(argv[1]);
 
     int maxCores = omp_get_max_threads();
-    //std::cout << " Moyenne avec cache chaud " << cores <<":"<< maxCores << std::endl;
+    std::cout << " Moyenne avec cache chaud " << cores <<":"<< maxCores << std::endl;
    
    for (auto cores =2; cores <= maxCores; cores+=2) {
        omp_set_num_threads(cores);
