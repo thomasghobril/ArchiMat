@@ -29,12 +29,12 @@ int main(int argc, char* argv[]) {
     int maxCores = omp_get_max_threads();
     //std::cout << " Moyenne avec cache chaud " << cores <<":"<< maxCores << std::endl;
    
-   for (auto cores =2; cores < maxCores; cores+=2) {
+   for (auto cores =2; cores <= maxCores; cores+=2) {
        omp_set_num_threads(cores);
 
-    for(unsigned long long size = 1024; size<(32*1024*1024);size*=1.2) {
+    for(unsigned long long size = 1024/8; size<(32*1024*1024)/8;size*=1.1) {
         //unsigned long long iter = 10*(128*1024*1024/size);
-        unsigned long long iter = 20;
+        unsigned long long iter = 30;
 
     // Création des données de travail
     double * A,* B,* C,* S1,* S2, * A1,* B1,* A2,* B2;
