@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
     /* initialize random seed: */
     srand (time(NULL));
     unsigned short int cores = atoi(argv[1]);
-
+    omp_set_num_threads(cores);
     int maxCores = omp_get_max_threads();
     std::cout << " Moyenne avec cache chaud " << cores <<":"<< maxCores << std::endl;
    
