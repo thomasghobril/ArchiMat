@@ -26,6 +26,7 @@ int main(int argc, char* argv[]) {
     srand (time(NULL));
     unsigned short int cores = atoi(argv[1]);
     omp_set_num_threads(cores);
+    std::cout << " Moyenne avec cache chaud " << cores <<":"<<omp_get_max_threads() << std::endl;
 
     for(unsigned long long size = 1024; size<(128*1024*1024);size*=1.2) {
         //unsigned long long iter = 10*(128*1024*1024/size);
@@ -74,7 +75,7 @@ int main(int argc, char* argv[]) {
     double par_duration = std::chrono::duration<double>(t1-t0).count();
     par_duration /= (size*iter);
     
-    std::cout << " Moyenne avec cache chaud " << omp_get_max_threads() << std::endl;
+    
     std::cout << 8*size/1024 << " " << seq_duration << " " << par_duration << " " << seq_duration/par_duration << " " << iter << " " << result << " " << std::endl;
     // std::cout << size << " " << seq_duration << " " << par_duration << std::endl;
 
