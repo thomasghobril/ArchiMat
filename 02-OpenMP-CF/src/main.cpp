@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
    for (auto cores =2; cores <= maxCores; cores+=2) {
        omp_set_num_threads(cores);
 
-    for(unsigned long long size = 8192/8; size<(32*1024*1024)/8;size = size + max(1024, size*0.1)) {
+    for(unsigned long long size = 8192/8; size<(32*1024*1024)/8;size = size + std::max(1024, int(size*0.1))) {
         unsigned long long iter = 45;
 
     // Création des données de travail
