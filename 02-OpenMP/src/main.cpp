@@ -76,6 +76,7 @@ int main(int argc, char* argv[]) {
         seq_duration = std::min(seq_duration,std::chrono::duration<double>(t1-t0).count());
         result += clean(cleanCache, maxSize);
     }
+    seq_duration = seq_duration/(size);
    
     double par_duration = 12345.6789;
     for (auto it =0; it < iter; it++) {
@@ -85,9 +86,10 @@ int main(int argc, char* argv[]) {
         par_duration = std::min(par_duration,std::chrono::duration<double>(t1-t0).count());
         result += clean(cleanCache, maxSize);
     }
+    par_duration = par_duration/(size)
 
-        std::cout << 8*size/1024 << " " << seq_duration << " " << par_duration << " ";
-        std::cout << seq_duration/par_duration << " " << cores << " " << result << " " << std::endl;
+    std::cout << 8*size/1024 << " " << seq_duration << " " << par_duration << " ";
+    std::cout << seq_duration/par_duration << " " << cores << " " << result << " " << std::endl;
     
     /*** Validation ***/
     bool valide = false;
