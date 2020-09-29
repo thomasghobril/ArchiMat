@@ -68,25 +68,24 @@ int main(int argc, char* argv[]) {
     double min_duration = DBL_MAX;
     
     
-    t0 = std::chrono::high_resolution_clock::now();
+    double seq_duration = 12345.6789;
     for (auto it =0; it < iter; it++) {
+        t0 = std::chrono::high_resolution_clock::now();
         result += sequentiel(A, B, S1, size);
+        t1 = std::chrono::high_resolution_clock::now();
+        seq_duration = std::min(seq_duration,std::chrono::duration<double>(t1-t0).count());
         result += clean(cleanCache, maxSize);
     }
-    t1 = std::chrono::high_resolution_clock::now();
-    double seq_duration = std::chrono::duration<double>(t1-t0).count();
-    seq_duration /= (size*iter);
-
- 
+   
+    double par_duration = 12345.6789;
+    for (auto it =0; it < iter; it++) {
         t0 = std::chrono::high_resolution_clock::now();
-        for (auto it =0; it < iter; it++) {
-            result += parallele(A, B, S2, size);
-            result += clean(cleanCache, maxSize);
-        }
+        result += parallele(A, B, S2, size);
         t1 = std::chrono::high_resolution_clock::now();
-        double par_duration = std::chrono::duration<double>(t1-t0).count();
-        par_duration /= (size*iter);    
-    
+        par_duration = std::min(par_duration,std::chrono::duration<double>(t1-t0).count());
+        result += clean(cleanCache, maxSize);
+    }
+
         std::cout << 8*size/1024 << " " << seq_duration << " " << par_duration << " ";
         std::cout << seq_duration/par_duration << " " << cores << " " << result << " " << std::endl;
     
@@ -106,6 +105,7 @@ int main(int argc, char* argv[]) {
 
     free(A);
     free(B);
+    free(cleanCache);
     free(S1);
     free(S2);    
 }
