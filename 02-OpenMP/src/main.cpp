@@ -86,7 +86,7 @@ int main(int argc, char* argv[]) {
         par_duration = std::min(par_duration,std::chrono::duration<double>(t1-t0).count());
         result += clean(cleanCache, maxSize);
     }
-    par_duration = par_duration/(size)
+    par_duration = par_duration/(size);
 
     std::cout << 8*size/1024 << " " << seq_duration << " " << par_duration << " ";
     std::cout << seq_duration/par_duration << " " << cores << " " << result << " " << std::endl;
