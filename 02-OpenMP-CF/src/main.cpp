@@ -35,7 +35,7 @@ int main() {
     
     int maxCores = omp_get_max_threads();
     int maxSize = (27*1024*1024)/sizeof(double); // la taille des caches de 2 noeuds sur DCE
-    std::cout << " Moyenne avec cache chaud " << cores <<":"<< maxCores << std::endl;
+    std::cout << " Moyenne avec cache froid " << cores <<":"<< maxCores << std::endl;
     
     double * seq_duration;
     seq_duration = (double *) malloc((32*1024*1024/8192) * sizeof(double)); 
