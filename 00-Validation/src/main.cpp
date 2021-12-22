@@ -50,6 +50,8 @@ int main(int argc, char* argv[]) {
     std::cout << "width height : ns per point" << std::endl;
     float ops = width*(height-1);
     std::cout << width << " " << height << " " << (1e9 * min_duration/ops) << std::endl;
+
+    // Free data structures
     free(A);
     free(S);
 
