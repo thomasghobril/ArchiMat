@@ -10,7 +10,6 @@ FILE = main.cpp
 SRC_PATH = src
 OBJ_PATH = obj
 EXE_PATH = exe
-INC_PATH = include
 
 # -- Macros ----------
 CC = g++
@@ -18,10 +17,8 @@ CC = g++
 # -- Flags ----------
 C_OPTIMISATION_FLAGS = -O3 -std=c++17 -g
 
-C_INC_FLAGS = -I$(INC_PATH)
-
-CFLAGS = $(C_OPTIMISATION_FLAGS) $(C_INC_FLAGS)
-LDFLAGS = $(C_OPTIMISATION_FLAGS) $(C_INC_FLAGS)
+CFLAGS = $(C_OPTIMISATION_FLAGS)
+LDFLAGS = $(C_OPTIMISATION_FLAGS)
 
 # -- Final product ----------
 PRODUCT   = test.exe
