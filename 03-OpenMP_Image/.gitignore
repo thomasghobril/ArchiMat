@@ -1,6 +1,0 @@
-*.out
-.vscode
-.vscode/*
-obj/*.o
-exe/*.exe
-/*.png
