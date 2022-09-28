@@ -1,4 +1,3 @@
-
 echo "Avec vectorisation"
 for I in {32..4096..16}
 do
@@ -13,6 +12,3 @@ do
 exe/tp1_ex2_novec.exe $ITER $I
 done
 
-/gpfs/opt/bin/fusion-whereami
-date
-time sleep 2
