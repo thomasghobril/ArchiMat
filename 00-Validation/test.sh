@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -o errexit
+
 make clean; make
 
 for I in {32..4096..8}
