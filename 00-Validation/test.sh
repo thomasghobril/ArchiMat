@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+make clean; make
+
 set -o errexit # stop en cas d'erreur
 
 make clean; make # regénérer les executables
