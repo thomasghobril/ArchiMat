@@ -12,11 +12,11 @@ float sequentiel(float* A, float* B, float* C, float* S, unsigned long int size)
 }
 
 float sequentiel2(float* A, float* B, unsigned long int size) {
-    float S = .0f;
+    float s = .0f;
     for (unsigned long int i = 0; i < size; i++) {
-        S += A[i]*B[i];
+        s += A[i]*B[i];
     }
-    return S;
+    return s;
 }
 
 float parallele(float* A, float* B, float* C, float* S, unsigned long int size) {
@@ -34,14 +34,13 @@ float parallele(float* A, float* B, float* C, float* S, unsigned long int size) 
 }
 
 float parallele2(float* A, float* B, unsigned long int size) {
-    __m512 S = _mm512_setzero_ps();
+    __m512 s = _mm512_setzero_ps();
     for (unsigned long i = 0; i < size; i+=16) {
         __m512 a = _mm512_loadu_ps(&A[i]);
         __m512 b = _mm512_loadu_ps(&B[i]);
-        __m512 s = _mm512_mul_ps(a, b);
-        __m512 S = _mm512_add_ps(S, s);
+        s = _mm512_add_ps(s, _mm512_mul_ps(a, b));
     }
-    return _mm512_reduce_add_ps(S);;
+    return _mm512_reduce_add_ps(s);
 }
 
 int main(int argc, char* argv[]) {
@@ -56,7 +55,7 @@ int main(int argc, char* argv[]) {
     // std::cout << iter << " " << size << std::endl;
     
     // Création des données de travail
-    float * A,* B,* C,* S1,* S2;
+    float * A,* B; //,* C,* S1,* S2;
     A = (float *) malloc(size * sizeof(float));
     B = (float *) malloc(size * sizeof(float));
     // C = (float *) malloc(size * sizeof(float));
@@ -73,6 +72,7 @@ int main(int argc, char* argv[]) {
     float s1 = sequentiel2(A,B,size);
     float s2 = parallele2(A,B,size);
     bool valide = s1 == s2;
+    float diff = s2 - s1;
     // for (unsigned long int i = 0; i < size; i++) {
     //     if(S1[i] == S2[i]) {
     //         valide = true;
@@ -82,7 +82,9 @@ int main(int argc, char* argv[]) {
     //         break;
     //     }
     // }
-    std::cout << "Le résultat est " << std::boolalpha << valide << std::endl;
+
+    // printf("diff %f\n", diff);
+    // std::cout << "Le résultat est " << std::boolalpha << valide << std::endl;
 
     std::chrono::high_resolution_clock::time_point t0 = std::chrono::high_resolution_clock::now();
     std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
@@ -96,7 +98,7 @@ int main(int argc, char* argv[]) {
         if (duration < min_duration) min_duration = duration;
     }
 
-    auto seq_duration = (min_duration/size);
+    auto seq_duration = min_duration;
     
     min_duration = DBL_MAX;
     result = 0;
@@ -108,14 +110,16 @@ int main(int argc, char* argv[]) {
         if (duration < min_duration) min_duration = duration;
     }
     
-    std::cout << size << " " << seq_duration << " " << (min_duration/size) << " " << result/size << std::endl;
+    // std::cout << size << " " << seq_duration << " " << (min_duration/size) << " " << result/size << std::endl;
     
+    std::cout << size << "," << seq_duration << "," << min_duration << std::endl;
+
     // Libération de la mémoire : indispensable
     free(A);
     free(B);
-    free(C);
-    free(S1);
-    free(S2);    
+    // free(C);
+    // free(S1);
+    // free(S2);    
 
     return 0;
 }
