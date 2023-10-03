@@ -11,6 +11,14 @@ float sequentiel(float* A, float* B, float* C, float* S, unsigned long int size)
     return S[3];
 }
 
+float sequentiel2(float* A, float* B, unsigned long int size) {
+    float S = .0f;
+    for (unsigned long int i = 0; i < size; i++) {
+        S += A[i]*B[i];
+    }
+    return S;
+}
+
 float parallele(float* A, float* B, float* C, float* S, unsigned long int size) {
     __m512 three = _mm512_set1_ps(3);
     for (unsigned long i = 0; i < size; i+=16) {
@@ -23,6 +31,17 @@ float parallele(float* A, float* B, float* C, float* S, unsigned long int size) 
         _mm512_storeu_ps(&S[i],s);
     }
     return S[3];
+}
+
+float parallele2(float* A, float* B, unsigned long int size) {
+    __m512 S = _mm512_setzero_ps();
+    for (unsigned long i = 0; i < size; i+=16) {
+        __m512 a = _mm512_loadu_ps(&A[i]);
+        __m512 b = _mm512_loadu_ps(&B[i]);
+        __m512 s = _mm512_mul_ps(a, b);
+        __m512 S = _mm512_add_ps(S, s);
+    }
+    return _mm512_reduce_add_ps(S);;
 }
 
 int main(int argc, char* argv[]) {
@@ -40,33 +59,30 @@ int main(int argc, char* argv[]) {
     float * A,* B,* C,* S1,* S2;
     A = (float *) malloc(size * sizeof(float));
     B = (float *) malloc(size * sizeof(float));
-    C = (float *) malloc(size * sizeof(float));
-    S1 = (float *) malloc(size * sizeof(float));
-    S2 = (float *) malloc(size * sizeof(float));
-
+    // C = (float *) malloc(size * sizeof(float));
+    // S1 = (float *) malloc(size * sizeof(float));
+    // S2 = (float *) malloc(size * sizeof(float));
 
     for (unsigned long int i = 0; i < size; i++) {
         A[i] = (float)(rand() % 360 - 180.0);
         B[i] = (float)(rand() % 360 - 180.0);
-        C[i] = (float)(rand() % 360 - 180.0);
+        // C[i] = (float)(rand() % 360 - 180.0);
     }
 
-    /*** Validation ***/
-    sequentiel(A,B,C,S1,size);
-    parallele(A,B,C,S2,size);
-    bool valide = false;
-    for (unsigned long int i = 0; i < size; i++) {
-        if(S1[i] == S2[i]) {
-            valide = true;
-        }
-        else {
-            valide = false;
-            break;
-        }
-    }
-    // std::cout << "Le résultat est " << std::boolalpha << valide << std::endl;
-
-    
+    // /*** Validation ***/
+    float s1 = sequentiel2(A,B,size);
+    float s2 = parallele2(A,B,size);
+    bool valide = s1 == s2;
+    // for (unsigned long int i = 0; i < size; i++) {
+    //     if(S1[i] == S2[i]) {
+    //         valide = true;
+    //     }
+    //     else {
+    //         valide = false;
+    //         break;
+    //     }
+    // }
+    std::cout << "Le résultat est " << std::boolalpha << valide << std::endl;
 
     std::chrono::high_resolution_clock::time_point t0 = std::chrono::high_resolution_clock::now();
     std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
@@ -74,7 +90,7 @@ int main(int argc, char* argv[]) {
     double result = 0;
     for (auto it =0; it < iter; it++) {
         t0 = std::chrono::high_resolution_clock::now();
-        result += sequentiel(A, B,C, S1, size);
+        result += sequentiel2(A, B, size);
         t1 = std::chrono::high_resolution_clock::now();
         double duration = std::chrono::duration<double>(t1-t0).count();
         if (duration < min_duration) min_duration = duration;
@@ -82,17 +98,15 @@ int main(int argc, char* argv[]) {
 
     auto seq_duration = (min_duration/size);
     
-
     min_duration = DBL_MAX;
     result = 0;
     for (auto it =0; it < iter; it++) {
         t0 = std::chrono::high_resolution_clock::now();
-        result += parallele(A, B,C, S2, size);
+        result += parallele2(A, B, size);
         t1 = std::chrono::high_resolution_clock::now();
         double duration = std::chrono::duration<double>(t1-t0).count();
         if (duration < min_duration) min_duration = duration;
     }
-
     
     std::cout << size << " " << seq_duration << " " << (min_duration/size) << " " << result/size << std::endl;
     
