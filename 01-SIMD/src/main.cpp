@@ -16,6 +16,7 @@ float sequentiel2(float* A, float* B, unsigned long int size) {
     for (unsigned long int i = 0; i < size; i++) {
         s += A[i]*B[i];
     }
+    std::cerr << s;
     return s;
 }
 
@@ -40,7 +41,9 @@ float parallele2(float* A, float* B, unsigned long int size) {
         __m512 b = _mm512_loadu_ps(&B[i]);
         s = _mm512_add_ps(s, _mm512_mul_ps(a, b));
     }
-    return _mm512_reduce_add_ps(s);
+    float res = _mm512_reduce_add_ps(s);
+    std::cerr << res;
+    return res;
 }
 
 int main(int argc, char* argv[]) {
