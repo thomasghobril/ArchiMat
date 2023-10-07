@@ -86,8 +86,7 @@ int main(int argc, char* argv[]) {
     //     }
     // }
 
-    // printf("diff %f\n", diff);
-    // std::cout << "Le résultat est " << std::boolalpha << valide << std::endl;
+    std::cerr << "Le résultat est " << std::boolalpha << valide << ", diff " << diff << std::endl;
 
     std::chrono::high_resolution_clock::time_point t0 = std::chrono::high_resolution_clock::now();
     std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
@@ -115,7 +114,7 @@ int main(int argc, char* argv[]) {
     
     // std::cout << size << " " << seq_duration << " " << (min_duration/size) << " " << result/size << std::endl;
     
-    std::cout << size << "," << seq_duration << "," << min_duration << std::endl;
+    std::cout << size << "," << (seq_duration/size) << "," << (min_duration/size) << std::endl;
 
     // Libération de la mémoire : indispensable
     free(A);
